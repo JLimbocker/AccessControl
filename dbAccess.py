@@ -13,7 +13,7 @@ class dbController:
 		
 		self.connected = False
 
-	def connect:
+	def connect():
 		try:
 			cnx = mysql.connector.connect(**dbConfig)
 
@@ -28,7 +28,7 @@ class dbController:
 		else:
 			self.connected = True
 
-	def isConnected:
+	def isConnected():
 		return self.connected
 
 	def isAllowed(student_id, f_name, l_name, tool_id):
