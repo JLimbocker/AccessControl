@@ -5,15 +5,20 @@ from collections import namedtuple
 import datetime
 
 def main():
-	user = readCard()
-	print("User: " + user.id + " " + user.name + " " + user.surname)
-	logUser(user)
-	#Execute printer software
-	if user:
-		printer = subprocess.Popen(["C:\Program Files\PolyPrinter\Pronterface\pronterface.exe", "-a"], close_fds=True)
-		slicer = subprocess.Popen(["C:\Program Files\PolyPrinter\KISSlicer\KISSlicer64.exe"], close_fds=True)
-	
+	while(True):
+		user = readCard()
 		
+		#Execute printer software if user exists
+		if user is not "":
+			print("User: " + user.id + " " + user.name + " " + user.surname)
+			logUser(user)
+			slicer = subprocess.Popen(["C:\Program Files\PolyPrinter\KISSlicer\KISSlicer64.exe"])
+			printer = subprocess.Popen(["python", "C:\Users\install\Documents\GitHub\Printrun\pronterface.py"], stdout=subprocess.PIPE)
+			
+			#Should work but doesn't print realtime
+			for line in iter(printer.stdout.readline, ""):
+				print line
+			
 def readCard():
 	swipe = getpass.getpass("Please swipe your ID.")
 
@@ -43,8 +48,9 @@ def readCard():
 	track2 = swipe[track2begin:track2end]
 	track3 = swipe[track3begin:track3end]
 	if not (track1 or track2 or track3):
-		print("Read Error")
-		sys.exit()
+		print "Card Read Error"
+		return 
+		
 	_userid = 0
 	_name = ""
 	_surname = ""
@@ -59,8 +65,9 @@ def readCard():
 		check = track2[len(track2)-8:len(track2)+2]
 		#double check id number
 		if _userid != check:
-			print("Card Error")
-			sys.exit()
+			print "Card Error"
+			return  #namedtuple('User',"Card Error")
+
 	#Uncomment for Debug info
 	#print("Track 1: " + track1 + "\n")
 	#print("Track 2: " + track2 + "\n")
@@ -78,7 +85,7 @@ def logUser(user):
 	logfile = open("C:\Program Files\PolyPrinter\Logs\logs.txt", 'a')
 	time = datetime.datetime.now()
 	timestamp = time.strftime("%m/%d/%Y %H:%M:%S")
-	logfile.write(timestamp + " " + user.id + " " + user.surname + " " + user.name)
+	logfile.write("\n" + timestamp + " " + user.id + " " + user.surname + " " + user.name + " ")
 	logfile.close()
 	#This function would write the user to a text file
 	
