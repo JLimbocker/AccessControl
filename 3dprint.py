@@ -3,10 +3,30 @@ import getpass
 import sys
 from collections import namedtuple
 import datetime
+import dbAccess
 
 def main():
+<<<<<<< HEAD
 	while(True):
 		user = readCard()
+=======
+	user = readCard()
+	print("User: " + user.id + " " + user.name + " " + user.surname)
+	logUser(user)
+	#Execute printer software
+	if user:
+		printer = subprocess.Popen(["C:\Program Files\PolyPrinter\Pronterface\pronterface.exe", "-a"], close_fds=True)
+		slicer = subprocess.Popen(["C:\Program Files\PolyPrinter\KISSlicer\KISSlicer64.exe"], close_fds=True)
+
+	#open connection to DB and check if they are allowed to use this device
+	#openDB()
+	#if dbCon.isConnected():
+	#	allowed = dbCon.isAllowed(user.id, user.name, user.surname, tool_id) #tool_id is the id associated with the specific tool in the DB. Expected hardcode for each tool (laser, cnc ect.)
+	
+def openDB():
+	dbCon = dbAccess()
+	dbCon.connect()
+>>>>>>> origin/master
 		
 		#Execute printer software if user exists
 		if user is not "":
