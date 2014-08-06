@@ -58,5 +58,17 @@ class dbController:
 		else:
 			return True
 
+	def getUserInfo(student_id):
+		userInfo = namedtuple('user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified')
+
+		cursor = cns.cursor()
+
+		query = ("SELECT 'user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified' FROM users WHERE id_number = %d")
+		cursor.execute(query, student_id)
+		if cursor.rowCount == 1:
+			return map(userInfo._make, cursor.fetchall()):
+
+
+
 
 
