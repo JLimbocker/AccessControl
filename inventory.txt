@@ -1,0 +1,5 @@
+Arduino		100	00 15
+PING_Sensor	80	01 4
+IR_Sensor	80	02 6
+RedBull		250	03 18
+Snickers	150	04 140

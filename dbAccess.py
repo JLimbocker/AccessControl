@@ -1,6 +1,10 @@
 import datetime
 import mysql.connector
 
+
+# Needs the following:
+#		getUser(id)
+#		getUser(id) would return a namedtuple containing all of the user data for that id in the db 
 class dbController:
 
 	dbConfig = {
