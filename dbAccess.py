@@ -1,10 +1,6 @@
 import datetime
 import mysql.connector
 
-
-# Needs the following:
-#		getUser(id)
-#		getUser(id) would return a namedtuple containing all of the user data for that id in the db 
 class dbController:
 
 	dbConfig = {
@@ -71,6 +67,46 @@ class dbController:
 		cursor.execute(query, student_id)
 		if cursor.rowCount == 1:
 			return map(userInfo._make, cursor.fetchall()):
+
+	def getItems():
+		itemDict = {}
+		Item = namedtuple('Item', 'name slot cost quantity')
+		cursor = cns.cursor()
+		query = ("SELECT name, slot, cost, quantity FROM Vending_Machine")
+		for row in cursor.execute(query):
+			itemDict[row.slot] = Item(row.name, row.slot, row.cost, row.quantity)
+		return itemDict
+
+	def setItems():
+		cursor = cns.cursor()
+		#query = 
+
+	def setItemBySlot(slot, name, cost, quantity):
+		cursor = cns.cursor()
+		#Use Transaction for Safety
+		cnx.start_transaction()
+		query = ("SELECT name FROM Vending_Machine WHERE slot = %d)")
+		cursor.execute(query, slot)
+		if cursor.rowCount is 1:
+			query = ("DELETE FROM Vending_Machine WHERE slot = %d")
+			cursor.execute(query, slot)
+
+		query = ("INSERT INTO Vending_Machine (slot, name, cost, quantity) VALUES (%d, %s, %d, %d)")
+		cursor.execute(query, (slot, name, cost, quantity))
+		cns.commit()
+		#End Transaction
+
+	def logTransaction(user_id):
+		cursor = cns.cursor()
+		now = datetime.datetime.now()
+		now.strftime('%Y-%m-%d %H:%M:%S')
+
+		cnx.start_transaction()
+		query = ("INSERT INTO transactions (user_id, time_stamp) VALUES (%d, %s)")
+		cursor.execute(query, (user_id, now))
+		cnx.commit()
+		
+
 
 
 
