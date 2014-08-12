@@ -1,0 +1,10 @@
+To Eric List:
+	-Function for retreiving group balance by user ID
+		-Returns int balance
+		-Accepts int parameter id
+	-Function for updating group balance by user ID
+		-Accepts int parameter balance, int parameter id
+	-Function for fetching Item List
+		-returns dict similar to what is created in initItems function in vendingmachine.py
+	-Function for updating item by slot number	
+		-accepts namedtuple 'Item', ['name','qty','cost', 'slot']
