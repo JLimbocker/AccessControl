@@ -59,11 +59,11 @@ class dbController:
 			return True
 
 	def getUserInfo(student_id):
-		userInfo = namedtuple('user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified')
+		userInfo = namedtuple('user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified', 'credit')
 
-		cursor = cns.cursor()
+		cursor = cnx.cursor()
 
-		query = ("SELECT 'user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified' FROM users WHERE id_number = %d")
+		query = ("SELECT 'user_id', 'fname', 'lname', 'email', 'hash', 'salt', 'id_number', 'grade_level', 'interests', 'balance', 'user_type', 'verified', 'credit' FROM users WHERE id_number = %d")
 		cursor.execute(query, student_id)
 		if cursor.rowCount == 1:
 			return map(userInfo._make, cursor.fetchall()):
@@ -71,18 +71,27 @@ class dbController:
 	def getItems():
 		itemDict = {}
 		Item = namedtuple('Item', 'name slot cost quantity')
-		cursor = cns.cursor()
+		cursor = cnx.cursor()
 		query = ("SELECT name, slot, cost, quantity FROM Vending_Machine")
 		for row in cursor.execute(query):
 			itemDict[row.slot] = Item(row.name, row.slot, row.cost, row.quantity)
 		return itemDict
 
+	def updateGroupCBalanceByUser(user_id, balance):
+		cursor = cnx.cursor()
+		query = ("SELECT group_id FROM in_group WHERE user_id = %d")
+		cursor.execute(query, user_id)
+		group_id = cursor.fetchrow()
+		query = ("UPDATE groups SET cedit = %d WHERE group_id = %d")
+		cursor.execute(query, (balance, group_id))
+		cnx.commit()
+
 	def setItems():
-		cursor = cns.cursor()
+		cursor = cnx.cursor()
 		#query = 
 
-	def setItemBySlot(slot, name, cost, quantity):
-		cursor = cns.cursor()
+	def setItemBySlot(slot, name, cost, quantity): 
+		cursor = cnx.cursor()
 		#Use Transaction for Safety
 		cnx.start_transaction()
 		query = ("SELECT name FROM Vending_Machine WHERE slot = %d)")
@@ -93,11 +102,11 @@ class dbController:
 
 		query = ("INSERT INTO Vending_Machine (slot, name, cost, quantity) VALUES (%d, %s, %d, %d)")
 		cursor.execute(query, (slot, name, cost, quantity))
-		cns.commit()
+		cnx.commit()
 		#End Transaction
 
 	def logTransaction(user_id):
-		cursor = cns.cursor()
+		cursor = cnx.cursor()
 		now = datetime.datetime.now()
 		now.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -105,6 +114,14 @@ class dbController:
 		query = ("INSERT INTO transactions (user_id, time_stamp) VALUES (%d, %s)")
 		cursor.execute(query, (user_id, now))
 		cnx.commit()
+
+	def getGroupBalanceByUser(user_id):
+		cursor = cnx.cursor()
+
+		#need groups table for individual group data and linking table for groups <-> users
+		query = ("SELECT balance FROM groups JOIN in_group WHERE user_id = %d")
+		cursor.execute(query, user_id)
+
 		
 
 
