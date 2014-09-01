@@ -69,13 +69,13 @@ class dbController:
 			return map(userInfo._make, cursor.fetchall()):
 
 	def getItems():
-		itemDict = {}
-		Item = namedtuple('Item', 'name slot cost quantity')
+		itemList = {}
+		Item = namedtuple('Item', ['name, slot, cost, quantity'])
 		cursor = cnx.cursor()
 		query = ("SELECT name, slot, cost, quantity FROM Vending_Machine")
 		for row in cursor.execute(query):
-			itemDict[row.slot] = Item(row.name, row.slot, row.cost, row.quantity)
-		return itemDict
+			itemList[row.slot] = Item._make(row.name, row.slot, row.cost, row.quantity)
+		return itemList
 
 	def updateGroupCBalanceByUser(user_id, balance):
 		cursor = cnx.cursor()
