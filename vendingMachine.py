@@ -177,7 +177,7 @@ class VendingMachine(wx.Frame):
 			self.cardString = ""
 			if(len(self.User.name) > 1):
 				self.User.name = self.User.name[0] + self.User.name[1::].lower()
-			if(len(self.User.id) is 8):
+			if(len(self.User.id) is 8):#add the user authentication in here
 				self.promptItem()
 		#event.Skip()
 		
