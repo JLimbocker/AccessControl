@@ -1,5 +1,7 @@
 import LabTrak
 import datetime
+import getpass
+from collections import namedtuple
 
 class LabTrakCardReader:
 
@@ -32,8 +34,7 @@ class LabTrakCardReader:
     	track2 = swipe[track2begin:track2end]
     	track3 = swipe[track3begin:track3end]
     	if not (track1 or track2 or track3):
-    		print "Card Read Error"
-    		return
+    		raise ReadError()
 
     	_userid = 0
     	_name = ""
