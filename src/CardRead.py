@@ -4,6 +4,8 @@ import getpass
 from collections import namedtuple
 
 class LabTrakCardReader:
+    db = LabTrak()
+    db.connect()
 
     def readCard():
     	swipe = getpass.getpass("Please swipe your ID.")
@@ -33,13 +35,18 @@ class LabTrakCardReader:
     	track1 = swipe[track1begin:track1end]
     	track2 = swipe[track2begin:track2end]
     	track3 = swipe[track3begin:track3end]
+
     	if not (track1 or track2 or track3):
     		raise ReadError()
 
-    	_userid = 0
+        return (track1, track2, track3)
+
+    def generateUser(track1, track2, track3, debug=False):
+        _userid = 0
     	_name = ""
     	_surname = ""
-    	#check card edition
+
+    	#Check card edition
     	if not track3:
     		_userid = track2[len(track2)-8:len(track2)+2]
 
@@ -51,21 +58,29 @@ class LabTrakCardReader:
     		check = track2[len(track2)-8:len(track2)+2]
     		#double check id number
     		if _userid != check:
-    			print "Card Error"
-    			return  #namedtuple('User',"Card Error")
+    			raise VerificationError(_userid, check)
 
-    	#Uncomment for Debug info
-    	#print("Track 1: " + track1 + "\n")
-    	#print("Track 2: " + track2 + "\n")
-    	#print("Track 3: " + track3 + "\n")
-    	#print("Name   : " + _name + " " + _surname)
-    	#print("UserID : " + _userid)
+    	if debug:
+        	print("Track 1: " + track1 + "\n")
+        	print("Track 2: " + track2 + "\n")
+        	print("Track 3: " + track3 + "\n")
+        	print("Name   : " + _name + " " + _surname + "\n")
+        	print("UserID : " + _userid)
 
     	User = namedtuple('User', ['name', 'surname', 'id'], verbose=False)
     	User.name = _name
     	User.surname = _surname
     	User.id = _userid
     	return User
+
+    def allowed(user, tool_id):
+        return (not (db.connected())) ? False : db.allowed(user.id, user.name, user.surname, tool_id)
+
+    def hasToolTraining(user, tool_id):
+        return (not (db.connected())) ? False : db.hasToolTraining(user.id, tool_id)
+
+    def getUserInfo(user):
+        return (not (db.connected())) ? False : db.getUserInfo(user.id)
 
 #Exception Classes
 
