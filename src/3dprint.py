@@ -5,18 +5,18 @@ from collections import namedtuple
 import datetime
 #import dbAccess
 
+printerToolID = 
 def main():
 	while(True):
 		user = readCard()
 
-		#Execute printer software if user exists
+		#Execute printer software if user exists.
+		#readCard() would return an exception anyways.
 		if user is not "":
-		#open connection to DB and check if they are allowed to use this device
-			#openDB()
-			#if dbCon.isConnected():
-			#	allowed = dbCon.isAllowed(user.id, user.name, user.surname, tool_id) #tool_id is the id associated with the specific tool in the DB. Expected hardcode for each tool (laser, cnc ect.)
-			#if allowed:
-			print("User: " + user.id + " " + user.name + " " + user.surname)
+			print("Hello " + user.name + " " + user.surname + "\n")
+			print("ID Number: " + user.id)
+
+			if
 			logUser(user)
 			slicer = subprocess.Popen(["C:\Program Files\PolyPrinter\KISSlicer\KISSlicer64.exe"])
 			printer = subprocess.Popen(["python", "C:\Users\install\Documents\GitHub\Printrun\pronterface.py"], shell = False, stdin = None, stdout = subprocess.PIPE, stderr = None)
@@ -54,10 +54,3 @@ def logUser(user):
 	#This function would write the user to a text file
 
 main()
-
-
-#New ID format
-#%0000000000000000000000000?;00000000000000000=00000000000?+00000000=LAST=FIRST=STATUS?
-
-#Old ID
-#;0000000000000000=000000000000?

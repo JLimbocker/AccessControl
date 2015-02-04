@@ -7,6 +7,8 @@ class LabTrakCardReader:
     db = LabTrak()
     db.connect()
 
+    #Reads the card swipe and returns a tuple containing each track.
+    #Raises an error if there is any misread track part.
     def readCard():
     	swipe = getpass.getpass("Please swipe your ID.")
 
@@ -41,6 +43,10 @@ class LabTrakCardReader:
 
         return (track1, track2, track3)
 
+    #Accepts three tracks (from readCard) and generates a named tuple with
+    #User information for querying.
+    #The debug flag prints out what we pulled from the track for testing
+    #purposes.
     def generateUser(track1, track2, track3, debug=False):
         _userid = 0
     	_name = ""
@@ -73,12 +79,20 @@ class LabTrakCardReader:
     	User.id = _userid
     	return User
 
+    #Takes a User namedtuple and the id of the tool the user is attempting to
+    #use and returns true if the user is allowed to use the tool and false if
+    #the user is not allowed.
     def allowed(user, tool_id):
         return (not (db.connected())) ? False : db.allowed(user.id, user.name, user.surname, tool_id)
 
+    #Takes a User namedtuple and the id of the tool the user is attempting to
+    #use and returns true if the user has the proper training for the tool
+    #and false if the user does not.
     def hasToolTraining(user, tool_id):
         return (not (db.connected())) ? False : db.hasToolTraining(user.id, tool_id)
 
+    #Takes a User namedtuple and returns information about the user from the
+    #database.
     def getUserInfo(user):
         return (not (db.connected())) ? False : db.getUserInfo(user.id)
 

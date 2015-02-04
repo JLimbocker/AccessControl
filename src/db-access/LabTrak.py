@@ -78,7 +78,7 @@ class LabTrak:
 
 		for row in cursor.execute(query):
 			itemList[row.slot] = Item._make(row.name, row.slot, row.cost, row.quantity)
-			
+
 		return itemList
 
 	def updateGroupCBalanceByUser(user_id, balance):
