@@ -5,7 +5,9 @@ from collections import namedtuple
 import datetime
 #import dbAccess
 
-printerToolID = 
+#LabTrak tool ID for the 3D Printer
+printerToolID =
+
 def main():
 	while(True):
 		user = readCard()
@@ -16,6 +18,8 @@ def main():
 			print("Hello " + user.name + " " + user.surname + "\n")
 			print("ID Number: " + user.id)
 
+			#Check if user is authorized to use the printer
+			#If not, then error message and send to sparkcore cloud
 			if
 			logUser(user)
 			slicer = subprocess.Popen(["C:\Program Files\PolyPrinter\KISSlicer\KISSlicer64.exe"])
